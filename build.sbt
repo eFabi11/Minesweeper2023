@@ -1,3 +1,5 @@
+import org.scoverage.coveralls.GitHubActions
+
 val scala3Version = "3.2.2"
 
 lazy val root = project
@@ -12,9 +14,18 @@ lazy val root = project
     
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.14" % "test",
-    jacocoCoverallsServiceName := "github-actions",
-    jacocoCoverallsBranch := sys.env.get("CI_BRANCH"),
-    jacocoCoverallsPullRequest := sys.env.get("GITHUB_EVENT_NAME"),
-    jacocoCoverallsRepoToken := sys.env.get("COVERALLS_REPO_TOKEN")
   )
-  .enablePlugins(JacocoCoverallsPlugin)
+
+import org.scoverage.coveralls.Imports.CoverallsKeys._
+
+coverallsTokenFile := sys.env.get("COVERALLS_REPO_TOKEN")
+coverallsService := Some(GitHubActions)
+
+coverageHighlighting := true
+coverageFailOnMinimum := false
+coverageMinimumStmtTotal := 0
+coverageMinimumBranchTotal := 0
+coverageMinimumStmtPerPackage := 0
+coverageMinimumBranchPerPackage := 0
+coverageMinimumStmtPerFile := 0
+coverageMinimumBranchPerFile := 0
