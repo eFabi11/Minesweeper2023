@@ -1,3 +1,8 @@
 [0m[[0m[0mdebug[0m] [0m[0mnot up to date. inChanged = true, force = false[0m
+<<<<<<< HEAD
 [0m[[0m[0mdebug[0m] [0m[0mUpdating ProjectRef(uri("file:/C:/Users/fabia/git/SE_5.Semester/Minesweeper/project/"), "minesweeper-build")...[0m
 [0m[[0m[0mdebug[0m] [0m[0mDone updating ProjectRef(uri("file:/C:/Users/fabia/git/SE_5.Semester/Minesweeper/project/"), "minesweeper-build")[0m
+=======
+[0m[[0m[0mdebug[0m] [0m[0mUpdating ProjectRef(uri("file:/C:/Users/Niklas/Studium/Semester5/SE/Minesweeper/project/"), "minesweeper-build")...[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone updating ProjectRef(uri("file:/C:/Users/Niklas/Studium/Semester5/SE/Minesweeper/project/"), "minesweeper-build")[0m
+>>>>>>> a69caac8cddde7b0fab0116eecec9ea79e343942
