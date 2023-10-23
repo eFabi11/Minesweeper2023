@@ -9,6 +9,7 @@ class FieldSpec extends AnyWordSpec
     {
         "is empty" should 
         {
+            
             val fieldOne = new Field(1)
             val field2 = new Field(2)
             val field3 = new Field(3)
