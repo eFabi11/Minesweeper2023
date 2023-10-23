@@ -1,65 +1,52 @@
-case class Cell(x:Int, y:Int)
+case class Employee(name: String, office:String, role:String)
 
-val cell1 = Cell(4,5)
-cell1.x
-cell1.y
+val sly = Employee("Sly", "Zurich", "Programmer")
 
-val cell2 = Cell(3,7)
+val king =  sly.copy(name="Joe")
 
-case class Field(cells: Array[Cell])
+case class Field(cellNumero: Int):
+    val endl = sys.props("line.separator")
+    // defines the bar
+    def bar(cellWidth: Int = 3, cellNum: Int = 3) = (("+" + "-" * cellWidth) * cellNum) + "+" + endl
+    // defines the cells
+    def cells(cellWidth: Int = 3, cellNum: Int = 3) = ("|" + " " * cellWidth) * cellNum + "|" + endl
+    // defines the grid and default size is 10x10 field
+    def mesh(cellWidth: Int = 3, cellNum: Int = cellNumero) = (bar(cellWidth, cellNum) + cells(cellWidth, cellNum)) * cellNum + bar(cellWidth, cellNum)
+    // prints grid default size is 10x10
+    override def toString(): String = mesh()
 
-val field1 = Field(Array.ofDim[Cell](1))
-field1.cells(0)=cell1
-field1.cells(0).x
-field1.cells(0).y
 
-case class PiBankFP(val coins:Int = 0)
-{
-    def insert(newCoins:Int): PiBankFP = copy(coins + newCoins)
-    def butcher = coins
+
+val f1 = new Field(1)
+val f2 = new Field(2)
+val f3 = new Field(3)
+
+val res1 = f1.mesh(1,1)
+val res2 = f2.mesh(1)
+val res3 = f3.mesh(1)
+val res4 = f1.mesh()
+val resf3 = f3.mesh()
+
+var field = new Field(3)
+field.toString
+
+//Chap4: More Scala
+
+case class Person(name: String, age: Int)
+
+val people = List(Person("Steve",32))
+val people2 = people :+ Person("Ali",17)
+val people3 = Person("Stacy",23)::List(Person("Steve",32), Person("Ali",17))
+val people4 = List(Person("Malloc",33))
+val people5 = people3 ::: people4
+val (minors, adults) = people5 partition (_.age < 18)
+
+def error(message: String): Nothing = {throw new RuntimeException(message)}
+def divideTest(x: Int, y: Int): Int = {
+    if(y!=0) x/y 
+    else error("Division by 0")
 }
 
-val p1 = new PiBankFP()
-val p2 = p1.insert(7)
-println(p2.butcher)
-
-// here we can test our Playfield for Minesweeper
-
-val endl = sys.props("line.separator")
-def bar(cellWidth: Int = 3, cellNum: Int = 3)= (("+" + "-" * cellWidth) * cellNum) + "+" + endl
-
-bar(3,9)
-
-//next one
-
-def cells(cellWidth: Int = 3, cellNum: Int = 3) = ("|" + " " * cellWidth) * cellNum + "|" + endl
-cells(9,9)
-
-def mesh(cellWidth: Int = 3, cellNum: Int = 10) = (bar(cellWidth, cellNum) + cells(cellWidth, cellNum)) * cellNum + bar(cellWidth, cellNum)
-
-println(mesh())
-
-case class Zelle(value:Int)
-{
-     def isSet: Boolean = value != 0
-}
-
-val cellOne = Zelle(2)
-cellOne.isSet
-
-val cellTwo = Zelle(0)
-cellTwo.isSet
-
-val fieldOne = Field(Array.ofDim[Cell](1))
-fieldOne.cells(0) = cell1
-
-case class Minenfeld(cells:Vector[Cell])
-val initMinefield = Minenfeld(Vector(cell1, cell2))
-
-case class MinFel(zellen:Vector[Zelle])
-val mf = MinFel(Vector(cellOne, cellTwo))
-
-initMinefield.cells(0).x
-initMinefield.cells(0).y
-
-mf.zellen(0).isSet
+val div1= divideTest(15,5)
+val div2 = divideTest(15, 2)
+//val div3 = divideTest(5, 0)

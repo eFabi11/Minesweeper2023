@@ -1,0 +1,312 @@
+case class Person(name: String, awesomeness: Int, iq: Int, age: Int)
+
+import scala.io.StdIn.readLine
+
+def hello():Unit = {println("Welcome to Minesweeper")}
+hello()
+
+// Play Minesweeper
+
+// utility function to check is cell(row, col) is valid or not
+var side = 7
+var bombs = 7
+val maxside = 25
+val maxmines = 99
+val movesize = 526 // // (25 * 25 - 99)
+
+val beginner = 0
+val intermediate = 1
+val advanced = 2
+
+var x = 0
+var y = 0
+ 
+//val side
+//val mines
+
+def isValid(row: Int, col: Int):Boolean = {row>=0 && row < side && col >=0 && col < side}
+
+// check if cell at location x,y has bomb or not
+def isMine(row: Int, col: Int, board: Array[Array[Char]]): Boolean = {if(board(row)(col) == '*') true else false}
+
+//Just for testing purposes. use makeMove funktion below for Game.
+def makeMoveTest(xcord: Int, ycord: Int): Unit = {
+    println("Enter move, (row, column) -> ") 
+    x = xcord
+    y = ycord
+}
+
+//read input and makes a move
+def makeMove(xcord: Int, ycord: Int): Unit = {
+    println("Enter move, (row, column) -> ") 
+    x = readLine().toInt
+    y = readLine().toInt
+}
+
+def printBoard(myBoard: Array[Array[Char]]):Unit = {
+    val side = myBoard.length
+
+    print("    ")
+
+    for (i <- 0 until side) {print(s"$i ")}
+    println("\n")
+
+    for(i <- 0 until side)
+    {
+       print(s"$i   ")
+       for(j <- 0 until side) {print(s"${myBoard(i)(j)} ")}
+       println("\n") 
+    } 
+    println("\n")
+
+}
+
+
+println(s"This is x: $x and this is y: $y")
+makeMoveTest(3,5)
+println(s"This is x: $x and this is y: $y")
+
+
+def blubb(bla: Int):Int = { bla*5}
+
+
+def countAdjacentMines(row: Int, col: Int, mines: Array[Array[Int]], realBoard: Array[Array[Char]]) : Int =  {
+    var count = 0;
+
+    // 1st Neighbour - NORTH
+    if(isValid(row-1, col) && isMine(row-1, col, realBoard)) {count += 1}
+
+    // 2nd Neighbour - SOUTH
+    if(isValid(row+1, col) && isMine(row+1, col, realBoard)) {count += 1}
+
+    // 3rd Neighbour - EAST
+    if(isValid(row, col+1) && isMine(row, col+1, realBoard)) {count += 1}
+
+    // 4 Neighbour - WEST
+    if(isValid(row, col-1) && isMine(row, col-1, realBoard)) {count += 1}
+
+    // 5 Neighbour - NORTH-EAST
+    if(isValid(row-1, col+1) && isMine(row-1, col+1, realBoard)) {count += 1}
+
+    // 6 Neighbour - NORTH-WEST
+    if(isValid(row-1, col-1) && isMine(row-1, col-1, realBoard)) {count += 1}
+
+    // 7 Neighbour - SOUTH-EAST
+    if(isValid(row+1, col+1) && isMine(row+1, col+1, realBoard)) {count += 1}
+
+    // 7 Neighbour - SOUTH-WEST
+    if(isValid(row+1, col-1) && isMine(row+1, col-1, realBoard)) {count += 1}
+
+    // last function or val, is return value in scala
+    count
+}
+
+// recursive function to play minesweeper
+def playMinesweeperUtil(myBoard: Array[Array[Char]], realBoard: Array[Array[Char]], mines: Array[Array[Int]], row: Int, col: Int, movesLeft: Int): Boolean = {
+    // Recursion Basisfall:
+    if (myBoard(row)(col) != '*') 
+        return false
+
+    // you opend mine an gonna lose:
+    if (realBoard(row)(col) == '*')
+        {
+            myBoard(row)(col) = '*'
+            for(i <- 0 until bombs)
+                myBoard(mines(i)(0))(mines(i)(1)) = '*'
+            printBoard(myBoard)
+            printf("\n You Lost! \n")
+            return true
+        }
+    else 
+        {
+            //calc number of adjacent mines a& put it on the board
+            val count = countAdjacentMines(row, col, mines, realBoard)
+            val help = movesLeft - 1
+            val movesleft = help
+            myBoard(row)(col) = (count + '0').toChar
+
+            if (count == 0) {
+                if (isValid(row-1, col) == true && isMine(row-1, col, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row-1, col, movesLeft)
+
+                if (isValid(row+1, col) == true && isMine(row+1, col, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row+1, col, movesLeft)
+
+                if (isValid(row, col+1) == true && isMine(row, col+1, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row, col+1, movesLeft)
+
+                if (isValid(row, col-1) == true && isMine(row, col-1, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row, col-1, movesLeft)
+
+                if (isValid(row-1, col+1) == true && isMine(row-1, col+1, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row-1, col+1, movesLeft)
+
+                if (isValid(row-1, col-1) == true && isMine(row-1, col-1, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row-1, col-1, movesLeft)
+
+                if (isValid(row+1, col+1) == true && isMine(row+1, col+1, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row+1, col+1, movesLeft)
+
+                if (isValid(row+1, col-1) == true && isMine(row+1, col-1, realBoard) == false)
+                    playMinesweeperUtil(myBoard, realBoard, mines, row+1, col-1, movesLeft)
+        }
+
+        return false
+        }
+}
+
+def placeMines(mines: Array[Array[Int]], realBoard: Array[Array[Char]]): Unit = {
+    import scala.util.Random
+    val mark = Array.fill(maxside * maxside)(false)
+    //continue until all random mines have been created.
+    var i = 0
+    while (i < bombs)
+        {
+            val random = Random.nextInt(side * side)
+            val x = random / side
+            val y = random % side
+
+            // add mine if no  mine is placed at this position on board
+            if(!mark(random)){
+                // Row index of the Mine
+                mines(i)(0) = x
+                // Column Index of the Mine
+                mines(i)(1) = y
+
+                //Place the mine
+                realBoard(mines(i)(0))(mines(i)(1)) = '*'
+                mark(random) = true
+                i = i + 1
+            }
+        }
+}
+
+import scala.util.Random
+import java.time.Instant
+
+  val echtesBoard = Array.ofDim[Char](side, side)
+  val meinBoard = Array.ofDim[Char](side, side)
+
+  var bewegeLinks = side * side - bombs
+  val dieMienen = Array.ofDim[Int](maxmines, 2)
+
+  initialise(echtesBoard, meinBoard)
+  placeMines(dieMienen, echtesBoard)
+  printBoard(meinBoard)
+  printBoard(echtesBoard)
+
+
+def initialise(realBoard: Array[Array[Char]], myBoard: Array[Array[Char]]): Unit = {
+    // initiate random number generator that same configuration dont arise
+    val seed = Instant.now.getEpochSecond
+    val random = new Random(seed)
+
+    // Assign all cells as mine-free
+    for(i <- 0 until side){
+        for(j <- 0 until side){
+            myBoard(i)(j) = '-'
+            realBoard(i)(j) = '-'
+        }
+    }
+}
+
+def cheatMinesweeper(realBoard: Array[Array[Char]]): Unit = {
+    println("The mines locations are-")
+    printBoard(realBoard)
+}
+
+def replaceMine(row: Int, col: Int, board: Array[Array[Char]]): Unit = {
+    for(i <- 0 until side){
+        for(j <-0 until side)
+        //find 1st location in board which is not having a mine & put a mine there
+        if(board(i)(j) != '*') {
+            board(i)(j) = '*'
+            board(row)(col) = '-'
+        }
+    }
+}
+
+def playMinesweeper(): Unit = {
+  // Initially the game is not over
+  var gameOver = false
+
+  // Actual Board and My Board
+  val realBoard = Array.ofDim[Char](side, side)
+  val myBoard = Array.ofDim[Char](side, side)
+
+  var movesLeft = side * side - bombs
+  val mines = Array.ofDim[Int](maxmines, 2) // stores (x,y) coordinates of all mines.
+
+  initialise(realBoard, myBoard)
+
+  // Place the Mines randomly
+  placeMines(mines, realBoard)
+
+  // You are in the game until you have not opened a mine - So keep playing
+  var currentMoveIndex = 0
+  while (!gameOver) {
+    println("Current Status of Board : ")
+    printBoard(myBoard)
+    makeMove(x, y)
+    //val (x, y) = makeMove(x, y)
+
+    // This is to guarantee that the first move is always safe If it is the first move of the game
+    if (currentMoveIndex == 0) {
+      // If the first move itself is a mine then we remove the mine from that location
+      if (isMine(x, y, realBoard)) {
+        replaceMine(x, y, realBoard)
+      }
+    }
+
+    currentMoveIndex += 1
+
+    gameOver = playMinesweeperUtil(myBoard, realBoard, mines, x, y, movesLeft)
+
+    if (!gameOver && movesLeft == 0) {
+      println("\nYou won !")
+      gameOver = true
+    }
+  }
+}
+
+def chooseDifficultyLevel(): Unit = {
+  /*
+  --> BEGINNER = 9 * 9 Cells and 10 Mines
+  --> INTERMEDIATE = 16 * 16 Cells and 40 Mines
+  --> ADVANCED = 24 * 24 Cells and 99 Mines
+  */
+
+  var level = 0
+
+  println("Enter the Difficulty Level")
+  println("Press 0 for BEGINNER (9 * 9 Cells and 10 Mines)")
+  println("Press 1 for INTERMEDIATE (16 * 16 Cells and 40 Mines)")
+  println("Press 2 for ADVANCED (24 * 24 Cells and 99 Mines)")
+
+  level = scala.io.StdIn.readInt()
+
+  if (level == beginner) {
+    side = 9
+    bombs = 10
+  }
+
+  if (level == intermediate) {
+    side = 16
+    bombs = 40
+  }
+
+  if (level == advanced) {
+    side = 24
+    bombs = 99
+  }
+}
+
+object MinesweeperDriver {
+  def main(args: Array[String]): Unit = {
+
+    
+    chooseDifficultyLevel()
+
+    playMinesweeper()
+  }
+}
