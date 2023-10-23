@@ -11,3 +11,5 @@ case class Field(cellNum: Int){
     def mesh(cellWidth: Int = 3, cellNum: Int = 10) = (bar(cellWidth, cellNum) + cells(cellWidth, cellNum)) * cellNum + bar(cellWidth, cellNum)
     // prints grid default size is 10x10
     println(mesh())}
+
+    //Test
