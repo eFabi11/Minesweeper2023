@@ -1,5 +1,6 @@
 package de.htwg.se.minesweeper.model
 
+import java.io.{ByteArrayOutputStream, PrintStream}
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -74,6 +75,20 @@ class FieldSpec extends AnyWordSpec
                 fieldx.equals(fieldy) should be(true)
                 fieldz.equals(fieldy) should be(false)
                 fieldy.equals(fieldy) should be(true)
+            }
+        }
+    }
+     "The Main object" when {
+    "executed" should {
+      "print the welcome message and create a field" in {
+        val outputStreamCaptor = new ByteArrayOutputStream()
+        Console.withOut(outputStreamCaptor) {
+          de.htwg.se.minesweeper.Main.main(Array.empty)
+        }
+
+        val capturedOutput = outputStreamCaptor.toString.trim
+        capturedOutput should include ("Welcome to Minesweeper")
+        // Note: Additional assertions might be added based on your requirements.
             }
         }
     }
