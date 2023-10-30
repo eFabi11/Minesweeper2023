@@ -79,8 +79,8 @@ class FieldSpec extends AnyWordSpec
         }
     }
      "The Main object" when {
-    "executed" should {
-      "print the welcome message and create a field" in {
+        "executed" should {
+        "print the welcome message and create a field" in {
         val outputStreamCaptor = new ByteArrayOutputStream()
         Console.withOut(outputStreamCaptor) {
           de.htwg.se.minesweeper.Main.main(Array.empty)
