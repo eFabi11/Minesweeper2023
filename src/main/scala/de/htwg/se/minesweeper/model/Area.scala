@@ -1,5 +1,5 @@
 package de.htwg.se.minesweeper.model
 
 object Area:
-    // utility function to check is cell(row, col) is valid or not
-    def inArea(row: Int, col: Int, side: Int): Boolean = {row >= 0 && row <= side && col >= 0 && col <= side}
+
+    def inArea(x: Int, y: Int, side: Int): Boolean = {x >= 0 && x <= side && y >= 0 && y <= side}

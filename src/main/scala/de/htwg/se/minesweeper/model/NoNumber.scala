@@ -5,7 +5,6 @@ import de.htwg.se.minesweeper.model.Symbols
 import de.htwg.se.minesweeper.model.Area.inArea
 
 object NoNumber:
-    // check if cell at location x,y has bomb or not
     
     def noNum(x : Int, y : Int , b2Matrix: Matrix[Symbols], p2Matrix: Matrix[Symbols], anzahlc : Int): (Int, Matrix[Symbols]) = {
 
@@ -13,7 +12,6 @@ object NoNumber:
     var noNumMatrix = p2Matrix
     val si = b2Matrix.size - 1
     var anzahlcoverd = anzahlc
-    //val resTuple1: (Set[(Int, Int)], Matrix[String])
 
     if(inArea(x+1, y+1, si)){
         val resTuple1 = Num(x+1, y+1, b2Matrix, p2Matrix, anzahlcoverd)

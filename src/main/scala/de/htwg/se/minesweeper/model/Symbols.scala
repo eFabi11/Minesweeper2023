@@ -5,11 +5,8 @@ package de.htwg.se.minesweeper.model
 enum Symbols(representedAsString: String):
     override def toString = representedAsString
 
-    // UFT-8 in hex is tilde // □ ☺ ■ ▫ ○
-    // Covered is before you open field
-    //s"${(0x7E).toChar}"
+
     case Covered extends Symbols("-")
-    case F extends Symbols("F")
     case Bomb extends Symbols("*")
     case Empty extends Symbols(" ")
     case Zero extends Symbols("0")
@@ -21,3 +18,4 @@ enum Symbols(representedAsString: String):
     case Six extends Symbols("6")
     case Seven extends Symbols("7")
     case Eight extends Symbols("8")
+    //case F extends Symbols("F")

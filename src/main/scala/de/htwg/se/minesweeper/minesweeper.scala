@@ -12,19 +12,18 @@ import model.Setbombs.setB
 import scala.compiletime.ops.int
 import scala.collection.immutable.HashSet
 import scala.collection.immutable.Set
-  import java.awt.Taskbar.State
+import java.awt.Taskbar.State
 
   object Main {
   def main(args: Array[String]): Unit = {
     println("Welcome to Minesweeper")
 
-    //val field1 = new Field(10)
-    //print(field1.toString())
-    val diff = setDifficulty()
-    val side = diff(0)
-    val anzahBomben = diff(1)
+  
+    val difficulty = setDifficulty()
+    val side = difficulty(0)
+    val anzahBomben = difficulty(1)
     var anzahlcoverd : Int = 0
-    //var anzahlcoverd : int = 0
+
 
     var playerMatrix = new Matrix(side, Symbols.Covered)
     val fieldstart = new Field(playerMatrix)
@@ -98,6 +97,6 @@ import scala.collection.immutable.Set
         }
       
     }
-
+      
   }
 }

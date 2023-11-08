@@ -58,7 +58,6 @@ object Number:
                         case 6 => Symbols.Six
                         case 7 => Symbols.Seven
                         case 8 => Symbols.Eight
-                        //case _ => Symbols.Empty
                     }
 
         tmpMatrix = tmpMatrix.replaceCell(y, x, symb)
