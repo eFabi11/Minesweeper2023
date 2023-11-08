@@ -1,24 +1,67 @@
 package de.htwg.se.minesweeper.model
-
-import de.htwg.se.minesweeper.model.IsValid.isValid
-import de.htwg.se.minesweeper.model.IsBomb.isBomb
+import de.htwg.se.minesweeper.model.Area.inArea
+import de.htwg.se.minesweeper.model.Checkifbomb.isBomb
+import de.htwg.se.minesweeper.model.Symbols
+import de.htwg.se.minesweeper.model.NoNumber.noNum
+import scala.collection.immutable.Set
 
 
 
 object Number:
-    // calculates the adjacentMines for location row,col
-    def numberBombs(row: Int, col: Int, side: Int, invisibleMatrix: Matrix[Symbols]): Int = {
-        var count = 0
-        val side2 = side
 
-        if(isValid(row-1, col, side2) && isMine(row-1, col, invisibleMatrix)) {count += 1} // 1ST NEIGHBOR : NORTH
-        if(isValid(row+1, col, side2) && isMine(row+1, col, invisibleMatrix)) {count += 1} // 2ND NEIGHBOR : SOUTH
-        if(isValid(row, col+1, side2) && isMine(row, col+1, invisibleMatrix)) {count += 1} // 3RD NEIGHBOR : EAST
-        if(isValid(row, col-1, side2) && isMine(row, col-1, invisibleMatrix)) {count += 1} // 4TH NEIGHBOR : WEST
-        if(isValid(row-1, col+1, side2) && isMine(row-1, col+1, invisibleMatrix)) {count += 1} // 5TH NEIGHBOR: NORTH-EAST
-        if(isValid(row-1, col-1, side2) && isMine(row-1, col-1, invisibleMatrix)) {count += 1} // 6TH NEIGHBOR: NORTH-WEST
-        if(isValid(row+1, col+1, side2) && isMine(row+1, col+1, invisibleMatrix)) {count += 1} // 7TH NEIGHBOR: SOUTH-EAST
-        if(isValid(row+1, col-1, side2) && isMine(row+1, col-1, invisibleMatrix)) {count += 1} // 8TH NEIGHBOR: SOUTH-WEST
+    
+    def Num(x : Int, y : Int, bMatrix: Matrix[Symbols], pMatrix: Matrix[Symbols] , bSet: (Set[(Int, Int)])): (Set[(Int, Int)], Matrix[Symbols]) = {
 
-        count // last function or val, is return value in scala
+
+    var tmpMatrix = pMatrix
+    var Tuple: (Int, Int) = (x, y)
+    val si = bMatrix.size - 1
+
+
+    if(!(inArea(x, y, si)) || bSet.contains(Tuple)){
+        return(bSet,pMatrix)
     }
+
+        var tmpSet = bSet + Tuple
+
+    
+    var minesFound = 0
+    if(isBomb(x+1, y+1, bMatrix)){minesFound += 1}
+    if(isBomb(x, y+1, bMatrix)){minesFound+= 1}
+    if(isBomb(x-1, y+1, bMatrix)){minesFound+= 1}
+    if(isBomb(x+1, y, bMatrix)){minesFound+= 1}
+    if(isBomb(x-1, y, bMatrix)){minesFound+= 1}
+    if(isBomb(x+1, y-1, bMatrix)){minesFound+= 1}
+    if(isBomb(x, y-1, bMatrix)){minesFound+= 1}
+    if(isBomb(x-1, y-1, bMatrix)){minesFound+= 1}
+
+
+    if(minesFound == 0){
+        tmpMatrix = tmpMatrix.replaceCell(y, x, Symbols.Empty)
+        val resTupleTmp = noNum(x, y, bMatrix, tmpMatrix, tmpSet)
+            tmpSet = resTupleTmp._1
+            tmpMatrix = resTupleTmp._2
+
+        
+        return(tmpSet, tmpMatrix)
+
+            
+    }else{
+        val symb = minesFound match {
+                        case 0 => Symbols.Zero
+                        case 1 => Symbols.One
+                        case 2 => Symbols.Two
+                        case 3 => Symbols.Three
+                        case 4 => Symbols.Four
+                        case 5 => Symbols.Five
+                        case 6 => Symbols.Six
+                        case 7 => Symbols.Seven
+                        case 8 => Symbols.Eight
+                        //case _ => Symbols.Empty
+                    }
+
+        tmpMatrix = tmpMatrix.replaceCell(y, x, symb)
+        (tmpSet,tmpMatrix)
+    }
+    return(tmpSet,tmpMatrix)
+}
