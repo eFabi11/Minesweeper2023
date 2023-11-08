@@ -10,19 +10,19 @@ import scala.collection.immutable.Set
 object Number:
 
     
-    def Num(x : Int, y : Int, bMatrix: Matrix[Symbols], pMatrix: Matrix[Symbols] , bSet: (Set[(Int, Int)])): (Set[(Int, Int)], Matrix[Symbols]) = {
+    def Num(x : Int, y : Int, bMatrix: Matrix[Symbols], pMatrix: Matrix[Symbols] , anzahlcNum: Int): (Int, Matrix[Symbols]) = {
 
 
     var tmpMatrix = pMatrix
-    var Tuple: (Int, Int) = (x, y)
     val si = bMatrix.size - 1
+    var anzahlcoverd = anzahlcNum
 
 
-    if(!(inArea(x, y, si)) || bSet.contains(Tuple)){
-        return(bSet,pMatrix)
+    if(!(inArea(x, y, si)) || pMatrix.cell(y, x) != Symbols.Covered){
+        return(anzahlcoverd,pMatrix)
     }
 
-        var tmpSet = bSet + Tuple
+
 
     
     var minesFound = 0
@@ -38,12 +38,13 @@ object Number:
 
     if(minesFound == 0){
         tmpMatrix = tmpMatrix.replaceCell(y, x, Symbols.Empty)
-        val resTupleTmp = noNum(x, y, bMatrix, tmpMatrix, tmpSet)
-            tmpSet = resTupleTmp._1
+        anzahlcoverd += 1
+        val resTupleTmp = noNum(x, y, bMatrix, tmpMatrix, anzahlcoverd)
+            anzahlcoverd = resTupleTmp._1
             tmpMatrix = resTupleTmp._2
 
         
-        return(tmpSet, tmpMatrix)
+        return(anzahlcoverd, tmpMatrix)
 
             
     }else{
@@ -61,7 +62,7 @@ object Number:
                     }
 
         tmpMatrix = tmpMatrix.replaceCell(y, x, symb)
-        (tmpSet,tmpMatrix)
+        anzahlcoverd += 1
     }
-    return(tmpSet,tmpMatrix)
+    return(anzahlcoverd,tmpMatrix)
 }

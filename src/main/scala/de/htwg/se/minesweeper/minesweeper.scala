@@ -23,6 +23,7 @@ import scala.collection.immutable.Set
     val diff = setDifficulty()
     val side = diff(0)
     val anzahBomben = diff(1)
+    var anzahlcoverd : Int = 0
     //var anzahlcoverd : int = 0
 
     var playerMatrix = new Matrix(side, Symbols.Covered)
@@ -47,12 +48,11 @@ import scala.collection.immutable.Set
     val Bombstart = new Field(bombenMatrix)
     print(Bombstart.toString())
 
-    //var aSet: Set[(x:Int, y:Int)] = new HashSet[(x:Int, y:Int)]()
-    var aSet: Set[(Int, Int)] = Set((-1, -1))
+
           
 
-    val resTuple = Num(x, y, bombenMatrix, playerMatrix, aSet)
-    aSet = resTuple._1
+    val resTuple = Num(x, y, bombenMatrix, playerMatrix, anzahlcoverd)
+    anzahlcoverd = resTuple._1
     playerMatrix = resTuple._2
 
     val matAfterFirstMove = new Field(playerMatrix)
@@ -83,14 +83,17 @@ import scala.collection.immutable.Set
         //val tupleSet: Set[(Int, Int)] = Set((1, 2), (3, 4), (5, 6))
 
 
-        val resTuple1 = Num(x, y, bombenMatrix, playerMatrix, aSet)
-        aSet = resTuple1._1
+        val resTuple1 = Num(x, y, bombenMatrix, playerMatrix, anzahlcoverd)
+        anzahlcoverd = resTuple1._1
         playerMatrix = resTuple1._2
 
         val matAfterMove = new Field(playerMatrix)
         print(matAfterMove.toString())
         
-
+        if(anzahlcoverd + anzahBomben == side* side){
+          Status.Won
+          printf("DU hast gewonnen!!!!!!\n")
+        }
   
         }
       

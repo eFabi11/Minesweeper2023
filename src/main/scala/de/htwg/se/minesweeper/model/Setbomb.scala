@@ -15,9 +15,9 @@ object Setbombs:
         while(AnzahlPlaziert < anzahlBomben){
             val x : Int = random.nextInt(sizeM)
             val y : Int = random.nextInt(sizeM)
-            val tupel = (x, y)
+            val tupel = (y, x)
             if(!(BombSet.contains(tupel))){
-                BombsMatrix = BombsMatrix.replaceCell(x, y, Symbols.Bomb)
+                BombsMatrix = BombsMatrix.replaceCell(y, x, Symbols.Bomb)
                 AnzahlPlaziert += 1
             }
         }
