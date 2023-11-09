@@ -8,10 +8,8 @@ import model.Area.inArea
 import model.Checkifbomb.isBomb
 import model.Status
 import model.Number.Num
-import model.Setbombs.setB
+import model.Setbomb.setB
 import scala.compiletime.ops.int
-import scala.collection.immutable.HashSet
-import scala.collection.immutable.Set
 import java.awt.Taskbar.State
 
   object Main {
