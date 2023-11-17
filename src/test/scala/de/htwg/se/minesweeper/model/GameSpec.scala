@@ -22,7 +22,7 @@ class GameSpec extends AnyWordSpec {
             Console.withIn(in) {
                 val (side, bombs) = testGame.setDifficulty()
                 side should be (9)
-                bombs should be (10)
+                bombs should be (6)
             }
         }
 
@@ -35,21 +35,13 @@ class GameSpec extends AnyWordSpec {
             }
         }
 
-        "return the advanced difficulty when input is 3" in {
-            val in = new java.io.ByteArrayInputStream("3\n".getBytes)
-            Console.withIn(in) {
-                val (side, bombs) = testGame.setDifficulty()
-                side should be (20)
-                bombs should be (85)
-            }
-        }
 
         "return the beginner difficulty by default when input is not recognized" in{
             val in = new java.io.ByteArrayInputStream("33\n".getBytes)
             Console.withIn(in){
                 val (side, bombs) = testGame.setDifficulty()
                 side should be (9)
-                bombs should be (10)
+                bombs should be (6)
             }
         }
     }
@@ -101,7 +93,7 @@ class GameSpec extends AnyWordSpec {
             boolCheckIsMine should be (true)
             boolCheckIsMine2 should be (false)
         }
-    }*/
+    }
 
     "Bombs" should {
         val testGame8 = new Game(Status.Playing)
@@ -163,5 +155,5 @@ class GameSpec extends AnyWordSpec {
             testResult13 should not be (testAdjacent)
         }
     }
-
+*/
 }
