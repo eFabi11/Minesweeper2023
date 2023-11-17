@@ -1,43 +1,19 @@
-/*import org.scalatest.wordspec.AnyWordSpec
+package de.htwg.se.minesweeper.controller
+
 import org.scalatest.matchers.should.Matchers._
-import org.scalatestplus.mockito.MockitoSugar
-import org.mockito.Mockito._
+import org.scalatest.wordspec.AnyWordSpec
+import de.htwg.se.minesweeper.model.Field
+import de.htwg.se.minesweeper.model.Symbols
+import de.htwg.se.minesweeper.model.Game
+import de.htwg.se.minesweeper.model.Status
 
-class ControllerTest extends AnyWordSpec with MockitoSugar {
+class ControllerSpec extends AnyWordSpec{
 
-  "Controller" should {
+    "The Controller" should {
 
-    "correctly handle the first move" in {
-      val mockField = mock[Field]
-      val mockGame = mock[Game]
-      val controller = new Controller(mockField, mockGame)
-
-      // Set up the mock behavior
-      when(mockGame.premierMove(any[Int], any[Int], any[Field], any[Game])).thenReturn(mockField)
-
-      controller.firstMove(0, 0, mockGame)
-
-      // Verify the field is updated and observers are notified
-      controller.field shouldBe mockField
-      verify(mockGame).premierMove(0, 0, mockField, mockGame)
-      verify(controller).notifyObservers
+        "when observed by an Observer" should{
+            val emptyField = new Field(3, Symbols.Empty)
+            val newGame = new Game(Status.Playing)
+        }
     }
-
-    "update the field correctly when uncovering a field" in {
-      val mockField = mock[Field]
-      val mockGame = mock[Game]
-      val controller = new Controller(mockField, mockGame)
-
-      // Set up the mock behavior
-      when(mockField.open(any[Int], any[Int], any[Game])).thenReturn(mockField)
-
-      controller.uncoverField(1, 1, mockGame)
-
-      // Verify the field is updated and observers are notified
-      controller.field shouldBe mockField
-      verify(mockField).open(1, 1, mockGame)
-      verify(controller).notifyObservers
-    }
-
-  }
-}*/
+}
