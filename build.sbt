@@ -14,9 +14,12 @@ lazy val root = project
     
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.14" % "test",
+    libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.9.0" % Test,
+    libraryDependencies += "org.mockito" % "mockito-core" % "3.11.2" % Test
   )
 
 import org.scoverage.coveralls.Imports.CoverallsKeys._
+
 
 coverallsTokenFile := sys.env.get("COVERALLS_REPO_TOKEN")
 coverallsService := Some(GitHubActions)
