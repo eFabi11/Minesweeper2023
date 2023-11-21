@@ -10,7 +10,6 @@ case class Game(state: Status):
     var anzahBomben = 0
     var side = 0
     var gameState = Status.Playing
-    var currentPlayer = Player("",0)
 
 
     def setDifficulty() = {
@@ -30,16 +29,6 @@ case class Game(state: Status):
                 case _ => (9, 6)
             }
 
-    }
-
-    def introMinesweeper: Player = {
-        println("Welcome to Minesweeper:\nEnter your Name")
-        val name = readLine()
-        println("Enter your Age")
-        val age = scala.io.StdIn.readInt()
-        println(s"Hi $name ($age). Lets Play!")
-        val newPlayer = new Player(name, age)
-        newPlayer
     }
 
     

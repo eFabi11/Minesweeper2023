@@ -64,5 +64,43 @@ class FieldSpec extends AnyWordSpec
 
 
         }
+        "Num" should {
+                val testGame9 = new Game(Status.Playing)
+                val side3 = 3
+                var testMatrix = new Matrix[Symbols](side3, Symbols.Empty)
+                val testBombMatrix = testMatrix.replaceCell(1, 1, Symbols.Bomb)
+                var testPlayerMatrix = new Matrix(side3, Symbols.Covered)
+
+                "have a Mine count" in{
+                    testPlayerMatrix = testGame9.Num(0, 0, testBombMatrix, testPlayerMatrix)
+
+                        testPlayerMatrix.cell(0,0) should be (Symbols.One)
+                        testPlayerMatrix.cell(1,0) should be (Symbols.Covered)
+                        testPlayerMatrix.cell(2,2) should be (Symbols.Covered)
+                        testPlayerMatrix.cell(1,1) should be (Symbols.Covered)
+                        testBombMatrix.cell(1,1) should be (Symbols.Bomb)
+
+                    testPlayerMatrix = testGame9.Num(0, 1, testBombMatrix, testPlayerMatrix)
+                        
+                        testPlayerMatrix.cell(0,0) should be (Symbols.One)
+                        testPlayerMatrix.cell(1,0) should be (Symbols.One)
+                        testPlayerMatrix.cell(2,2) should be (Symbols.Covered)
+                        testPlayerMatrix.cell(1,1) should be (Symbols.Covered)
+                        testBombMatrix.cell(1,1) should be (Symbols.Bomb)
+
+
+                    testPlayerMatrix = testGame9.Num(2, 2, testBombMatrix, testPlayerMatrix)
+                        
+
+                        testPlayerMatrix.cell(0,0) should be (Symbols.One)
+                        testPlayerMatrix.cell(1,0) should be (Symbols.One)
+                        testPlayerMatrix.cell(2,2) should be (Symbols.One)
+                        testPlayerMatrix.cell(1,1) should be (Symbols.Covered)
+                        testBombMatrix.cell(1,1) should be (Symbols.Bomb)
+
+                
+                }
+        }
+
     }
 }

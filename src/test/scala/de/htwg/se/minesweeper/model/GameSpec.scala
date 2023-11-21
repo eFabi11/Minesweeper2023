@@ -45,26 +45,6 @@ class GameSpec extends AnyWordSpec {
             }
         }
     }
-      "The introMinesweeper method" should {
-        val testGame2 = new Game(Status.Playing)
-        "prompt the user for name and age" in {
-            val in = new java.io.ByteArrayInputStream("Fabi\n18\n".getBytes)
-            Console.withIn(in){
-                val player = testGame2.introMinesweeper
-                player.name should be ("Fabi")
-                player.age should be (18)
-            }
-        }
-
-        "return a new Player object with the input name and age" in{
-            val in = new java.io.ByteArrayInputStream("Niklas\n20\n".getBytes)
-            Console.withIn(in){
-                val player2 = testGame2.introMinesweeper
-                player2.name should be ("Niklas")
-                player2.age should be (20)
-            }
-        }
-    }
 
 /*
     "Covered" should {
@@ -80,7 +60,7 @@ class GameSpec extends AnyWordSpec {
         }
     }
 
-
+*/
     "Minecheck" should{
         val testGame6 = new Game(Status.Playing)
         val side4 = 3
@@ -88,46 +68,97 @@ class GameSpec extends AnyWordSpec {
         val mineCheckMatrix2 = mineCheckMatrix.replaceCell(1, 1, Symbols.Bomb)
 
         "check if cell at location x,y has bomb or not" in{
-            val boolCheckIsMine = testGame6.isMine(1, 1, mineCheckMatrix2)
-            val boolCheckIsMine2 = testGame6.isMine(0, 0, mineCheckMatrix2)
+            val boolCheckIsMine = testGame6.isBomb(1, 1, mineCheckMatrix2)
+            val boolCheckIsMine2 = testGame6.isBomb(0, 0, mineCheckMatrix2)
             boolCheckIsMine should be (true)
             boolCheckIsMine2 should be (false)
         }
     }
 
     "Bombs" should {
-        val testGame8 = new Game(Status.Playing)
-        val side = 4
-        val bombs = 9
-        val testMineMatrix = new Matrix(side, Symbols.Empty)
 
-        "be initialised random with the given amount of bombs" in{
-            val testMineMatrixResult = testGame8.intitializeBombs(testMineMatrix, bombs)
+        val testGame8 = new Game(Status.Playing)
+        val side = 3
+        val bombs = 8
+        val testMineMatrix = new Matrix(side, Symbols.Empty)
+        
+        "be initialised random with the given amount of bombs" in {
+            val testMineMatrixResult = testGame8.setB(testMineMatrix, bombs, 1, 1)
             testMineMatrixResult.cell(0, 0) should be (Symbols.Bomb)
-            testMineMatrixResult.cell(1, 1) should be (Symbols.Bomb)
+            testMineMatrixResult.cell(1, 0) should be (Symbols.Bomb)
+            testMineMatrixResult.cell(0, 1) should be (Symbols.Bomb)
             testMineMatrixResult.cell(2, 2) should be (Symbols.Bomb)
         }
     }
 
-    "Replace calling method replaceBombMatrix" should {
-        val testGame10 = new Game(Status.Playing)
-        var leTestMatrix10 = new Matrix(3, Symbols.Empty)
-        val oneBombMatrix = leTestMatrix10.replaceCell(0, 0, Symbols.Bomb)
+    "Number" should{
+
+        val testGame9 = new Game(Status.Playing)
+        val side3 = 3
+        var testMatrix = new Matrix[Symbols](side3, Symbols.Empty)
+        val testBombMatrix = testMatrix.replaceCell(1, 1, Symbols.Bomb)
+        var testPlayerMatrix = new Matrix(side3, Symbols.Covered)
+        
+        "have a Mine count" in{
+            testPlayerMatrix = testGame9.Num(0, 0, testBombMatrix, testPlayerMatrix)
+
+                testPlayerMatrix.cell(0,0) should be (Symbols.One)
+                testPlayerMatrix.cell(1,0) should be (Symbols.Covered)
+                testPlayerMatrix.cell(2,2) should be (Symbols.Covered)
+                testPlayerMatrix.cell(1,1) should be (Symbols.Covered)
+                testBombMatrix.cell(1,1) should be (Symbols.Bomb)
+
+            testPlayerMatrix = testGame9.Num(0, 1, testBombMatrix, testPlayerMatrix)
+                
+                testPlayerMatrix.cell(0,0) should be (Symbols.One)
+                testPlayerMatrix.cell(1,0) should be (Symbols.One)
+                testPlayerMatrix.cell(2,2) should be (Symbols.Covered)
+                testPlayerMatrix.cell(1,1) should be (Symbols.Covered)
+                testBombMatrix.cell(1,1) should be (Symbols.Bomb)
 
 
-        "replace matrix and ensure the player doesn't click on bomb at first move" in{
-            //val bombs10 = 8
-            //val initBombs = testGame10.intitializeBombs(leTestMatrix10, bombs10)
-            val newTestMatrix = testGame10.replaceBombMatrix(oneBombMatrix, 1, 0, 0)
-            //newTestMatrix.cell(1,1) should be (Symbols.Empty)
-            newTestMatrix.cell(0,0) shouldNot equal (Symbols.Bomb)
+            testPlayerMatrix = testGame9.Num(2, 2, testBombMatrix, testPlayerMatrix)
+                
+
+                testPlayerMatrix.cell(0,0) should be (Symbols.One)
+                testPlayerMatrix.cell(1,0) should be (Symbols.One)
+                testPlayerMatrix.cell(2,2) should be (Symbols.One)
+                testPlayerMatrix.cell(1,1) should be (Symbols.Covered)
+                testBombMatrix.cell(1,1) should be (Symbols.Bomb)
+
+
         }
-
     }
-    
+
+    "NoNum" should{
+
+            val side3 = 3
+            val testGame10 = new Game(Status.Playing)
+            var testMatrix = new Matrix[Symbols](side3, Symbols.Empty)
+            val testBombMatrix = testMatrix.replaceCell(0, 0, Symbols.Bomb)
+            var testPlayerMatrix = new Matrix(side3, Symbols.Covered)
+            var testAnzahlcoverd : Int = 0
+            
+            "have a Mine count" in{
+                testPlayerMatrix = testGame10.Num(2, 2, testBombMatrix, testPlayerMatrix)
+
+
+                testPlayerMatrix.cell(0,0) should be (Symbols.Covered)
+                testPlayerMatrix.cell(1,0) should be (Symbols.One)
+                testPlayerMatrix.cell(0,1) should be (Symbols.One)
+                testPlayerMatrix.cell(1,1) should be (Symbols.One)
+                testPlayerMatrix.cell(2,2) should be (Symbols.Empty)
+                testPlayerMatrix.cell(1,2) should be (Symbols.Empty)
+
+                testBombMatrix.cell(0,0) should be (Symbols.Bomb)
+
+
+            }
+    }
+
     "Function premierMove" should {
         val testGame12 = new Game(Status.Playing)
-        testGame12.bombs = 2
+        testGame12.anzahBomben = 2
         testGame12.side = 3
         val testSide = 3
         val testField = new Field(testSide, Symbols.Covered)
@@ -139,7 +170,7 @@ class GameSpec extends AnyWordSpec {
         }
     
     }
-    
+    /*
         "Function decide" should{
         val testGame13 = new Game(Status.Lost)
         testGame13.gameState = Status.Lost
