@@ -22,8 +22,6 @@ case class Field(matrix: Matrix[Symbols], bomben: Matrix[Symbols]):
 
     def isBomb(x: Int, y: Int, m: Matrix[Symbols]): Boolean = {
         val si = m.size-1
-        printf("isbomb si = ")
-        println(si)
         if(inArea(x, y,si)){
             if(m.cell(y, x) == Symbols.Bomb){
                 return true

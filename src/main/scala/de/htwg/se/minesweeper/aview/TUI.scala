@@ -16,10 +16,10 @@ class TUI(controller: Controller) extends Observer:
     var state = controller.game.state
 
     def run =
-        println("Choose difficulty level:")
-        // Hier Aufruf der Funktion zum Setzen des Schwierigkeitsgrads
-        controller.game.setDifficulty()
         println(controller.field.toString)
+        firstMoveInputParser
+        parseInputandPrintLoop()
+
         
     override def update = println(controller.field.toString())
 

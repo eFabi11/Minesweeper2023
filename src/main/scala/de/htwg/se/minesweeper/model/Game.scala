@@ -3,6 +3,8 @@ package de.htwg.se.minesweeper.model
 import scala.io.StdIn.readLine
 import scala.util.Random
 import de.htwg.se.minesweeper.difficulty.DifficultyLevel
+import de.htwg.se.minesweeper.difficulty
+
 
 case class Game(var state: Status, var difficulty: DifficultyLevel.Level = DifficultyLevel.Easy) {
     var gameState = Status.Playing
@@ -25,19 +27,12 @@ case class Game(var state: Status, var difficulty: DifficultyLevel.Level = Diffi
             case _ => DifficultyLevel.Medium
         }
 
-        // Neuinitialisierung des Spielfeldes
-        resetField()
     }
 
     def inArea(x: Int, y: Int): Boolean = {
         x >= 0 && x < gridSize && y >= 0 && y < gridSize
     }
 
-    def resetField(): Unit = {
-        // Erstellen Sie ein neues Field-Objekt mit der aktuellen gridSize und bombCount
-        val newField = new Field(difficulty.gridSize, Symbols.Covered)
-        // Weitere Initialisierungslogik...
-    }
 
     def premierMove(x: Int, y: Int): Field = {
         var playerMatrix = new Matrix(gridSize, Symbols.Covered)
