@@ -6,24 +6,22 @@ import de.htwg.se.minesweeper.aview.TUI
 import de.htwg.se.minesweeper.model.Status
 
 
-  object Minesweeper {
+object Minesweeper {
   def main(args: Array[String]): Unit = {
-
     var msGame = new Game(Status.Playing)
 
+    // Setzen der Schwierigkeit, die intern die gridSize und bombCount aktualisiert
+    msGame.setDifficulty()
 
-    val diff = msGame.setDifficulty()
-    val side = diff(0)
-    val bombs = diff(1)
-    msGame.anzahBomben = bombs
-    msGame.side = side
+    // Verwenden von gridSize und bombCount aus dem Difficulty-Level des Spiels
+    val gridSize = msGame.difficulty.gridSize
+    val bombCount = msGame.difficulty.bombCount
 
-    var coveredField = new Field(side, Symbols.Covered)
-
+    // Initialisieren Sie das Spielfeld mit der entsprechenden Größe und Bombenanzahl
+    var coveredField = new Field(gridSize, Symbols.Covered)
     val controller = Controller(coveredField, msGame)
     val tui = TUI(controller)
  
     tui.run
-
   }
 }

@@ -5,10 +5,11 @@ import de.htwg.se.minesweeper.util.Observable
 import de.htwg.se.minesweeper.model.Game
 
 
+
 case class Controller(var field: Field, game: Game) extends Observable:
     
     def firstMove(x: Int, y: Int, game: Game) = 
-        field = game.premierMove(x, y, field, game)
+        field = game.premierMove(x, y)
         notifyObservers
 
     def uncoverField(x: Int , y: Int, game: Game) = 

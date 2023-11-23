@@ -2,62 +2,56 @@ package de.htwg.se.minesweeper.model
 
 import scala.io.StdIn.readLine
 import scala.util.Random
-import de.htwg.se.minesweeper.model.Field
+import de.htwg.se.minesweeper.difficulty.DifficultyLevel
 
-
-case class Game(state: Status):
-
-    var anzahBomben = 0
-    var side = 0
+case class Game(var state: Status, var difficulty: DifficultyLevel.Level = DifficultyLevel.Easy) {
     var gameState = Status.Playing
 
+    def gridSize: Int = difficulty.gridSize
+    def bombCount: Int = difficulty.bombCount
 
-    def setDifficulty() = {
-            println("Enter the Difficulty Level")
-            println("0 fuer 3x3 und 1er bombe)")
-            println("1 fuer 3x3 und 6 bomben")
-            println("2 fuer 16x16 und 40 bomben")
+    def setDifficulty(): Unit = {
+        println("Enter the Difficulty Level")
+        println("0 for Easy (3x3 grid, 1 bomb)")
+        println("1 for Medium (3x3 grid, 6 bombs)")
+        println("2 for Hard (16x16 grid, 40 bombs)")
 
+        val level = scala.io.StdIn.readInt()
 
-            val level = scala.io.StdIn.readInt()
+        difficulty = level match {
+            case 0 => DifficultyLevel.Easy
+            case 1 => DifficultyLevel.Medium
+            case 2 => DifficultyLevel.Hard
+            case _ => DifficultyLevel.Medium
+        }
 
-
-            level match {
-                case 0 => (3, 1)
-                case 1 => (9, 6)
-                case 2 => (16, 40)
-                case _ => (9, 6)
-            }
-
+        // Neuinitialisierung des Spielfeldes
+        resetField()
     }
 
-    
+    def inArea(x: Int, y: Int): Boolean = {
+        x >= 0 && x < gridSize && y >= 0 && y < gridSize
+    }
 
+    def resetField(): Unit = {
+        // Erstellen Sie ein neues Field-Objekt mit der aktuellen gridSize und bombCount
+        val newField = new Field(difficulty.gridSize, Symbols.Covered)
+        // Weitere Initialisierungslogik...
+    }
 
-    // Function for 1st Move
-    def premierMove(x: Int, y: Int, field: Field, game: Game): Field = {
-      // shows covered playField
-        var anzahlcoverd = 1 // noch ändern
-        var playerMatrix = new Matrix(side, Symbols.Covered)
-        val fieldstart = new Field(side, Symbols.Covered)
-        val emptyMatrix = new Matrix(side, Symbols.Empty)
-        val bombenMatrix = setB(emptyMatrix, anzahBomben, x, y)
+    def premierMove(x: Int, y: Int): Field = {
+        var playerMatrix = new Matrix(gridSize, Symbols.Covered)
+        val emptyMatrix = new Matrix(gridSize, Symbols.Empty)
+        val bombenMatrix = setB(emptyMatrix, bombCount, x, y)
 
         val Bombstart = new Field(bombenMatrix)
-        print(Bombstart.toString())
+        println(Bombstart.toString())
         
         playerMatrix = Num(x, y, bombenMatrix, playerMatrix)
 
-        val matrixAfterMove = new Field(playerMatrix, bombenMatrix)
-        matrixAfterMove
+        new Field(playerMatrix, bombenMatrix)
     }
-
-  
-    def inArea(x: Int, y: Int, side: Int): Boolean = {x >= 0 && x <= side && y >= 0 && y <= side}
-
-
-
-    // initialises hiddenMatrix witch is initialises with bombs with adjacent Numbers
+     // initialises hiddenMatrix witch is initialises with bombs with adjacent Numbers
     def Num(x : Int, y : Int, bMatrix: Matrix[Symbols], pMatrix: Matrix[Symbols]): Matrix[Symbols] = {
 
 
@@ -115,26 +109,23 @@ case class Game(state: Status):
         return tmpMatrix
     }
 
-    def setB(emty1Matrix: Matrix[Symbols], anzahlBomben: Int, x: Int, y: Int): Matrix[Symbols] = {
-      
+    def setB(emptyMatrix: Matrix[Symbols], bombCount: Int, x: Int, y: Int): Matrix[Symbols] = {
         val verboten = (y, x)
-        var BombsMatrix = emty1Matrix
-        val sizeM = emty1Matrix.size //-1
-        println(sizeM)
-        var AnzahlPlaziert : Int = 0
-        //var BombSet: Set[(Int, Int)] = Set((y, x))
+        var bombsMatrix = emptyMatrix
         val random = new Random()
-        while(AnzahlPlaziert < anzahlBomben){
-            val x : Int = random.nextInt(sizeM)
-            val y : Int = random.nextInt(sizeM)
-            val tupel = (y, x)
 
-            if(BombsMatrix.cell(y, x) != Symbols.Bomb && tupel != verboten){  //!(BombSet.contains(tupel))
-                BombsMatrix = BombsMatrix.replaceCell(y, x, Symbols.Bomb)
-                AnzahlPlaziert += 1
+        var placedBombs = 0
+        while (placedBombs < bombCount) {
+            val xPos = random.nextInt(gridSize)
+            val yPos = random.nextInt(gridSize)
+            val tuple = (yPos, xPos)
+
+            if (bombsMatrix.cell(yPos, xPos) != Symbols.Bomb && tuple != verboten) {
+                bombsMatrix = bombsMatrix.replaceCell(yPos, xPos, Symbols.Bomb)
+                placedBombs += 1
             }
         }
-        return BombsMatrix
+        bombsMatrix
     }
 
     def isBomb(x: Int, y: Int, m: Matrix[Symbols]): Boolean = {
@@ -149,3 +140,5 @@ case class Game(state: Status):
 
     def checkGameState(realgame: Game) =
       if(this.gameState == Status.Won) println("you just won!!!") else if (this.gameState == Status.Lost) println("you just Lost!!!") else print("")
+
+    }
