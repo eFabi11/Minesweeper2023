@@ -156,6 +156,26 @@ class GameSpec extends AnyWordSpec {
             }
     }
 
+    "inArea" should{
+
+            val side3 = 2
+            val testGame11 = new Game(Status.Playing)
+            var testMatrix = new Matrix[Symbols](side3+1, Symbols.Empty)
+            val testBombMatrix = testMatrix.replaceCell(0, 0, Symbols.Bomb)
+            var testPlayerMatrix = new Matrix(side3, Symbols.Covered)
+            var testAnzahlcoverd : Int = 0
+            "check if xy is in Area" in{
+                testGame11.inArea(0, 0, side3) should be (true)
+                testGame11.inArea(1, 1, side3) should be (true)
+                testGame11.inArea(2, 2, side3) should be (true)
+                testGame11.inArea(2, 0, side3) should be (true)
+                testGame11.inArea(3, 0, side3) should be (false)
+                testGame11.inArea(3, 3, side3) should be (false)
+                testGame11.inArea(2, 4, side3) should be (false)
+                testGame11.inArea(-1, 0, side3) should be (false)
+            }
+    }
+
     "Function premierMove" should {
         val testGame12 = new Game(Status.Playing)
         testGame12.anzahBomben = 2

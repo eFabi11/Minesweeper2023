@@ -102,5 +102,40 @@ class FieldSpec extends AnyWordSpec
                 }
         }
 
+        "Minecheck" should{
+            val testGame6 = new Game(Status.Playing)
+            val side4 = 3
+            val mineCheckMatrix = new Matrix(side4, Symbols.Empty)
+            val mineCheckMatrix2 = mineCheckMatrix.replaceCell(1, 1, Symbols.Bomb)
+
+            "check if cell at location x,y has bomb or not" in{
+                val boolCheckIsMine = testGame6.isBomb(1, 1, mineCheckMatrix2)
+                val boolCheckIsMine2 = testGame6.isBomb(0, 0, mineCheckMatrix2)
+                boolCheckIsMine should be (true)
+                boolCheckIsMine2 should be (false)
+            }
+        }
+
+        "inArea" should{
+
+            val side3 = 2
+            val testGame11 = new Game(Status.Playing)
+            var testMatrix = new Matrix[Symbols](side3+1, Symbols.Empty)
+            val testBombMatrix = testMatrix.replaceCell(0, 0, Symbols.Bomb)
+            var testPlayerMatrix = new Matrix(side3, Symbols.Covered)
+            var testAnzahlcoverd : Int = 0
+
+            "check if xy is in Area" in{
+                testGame11.inArea(0, 0, side3) should be (true)
+                testGame11.inArea(1, 1, side3) should be (true)
+                testGame11.inArea(2, 2, side3) should be (true)
+                testGame11.inArea(2, 0, side3) should be (true)
+                testGame11.inArea(3, 0, side3) should be (false)
+                testGame11.inArea(3, 3, side3) should be (false)
+                testGame11.inArea(2, 4, side3) should be (false)
+                testGame11.inArea(-1, 0, side3) should be (false)
+            }
+        }
+
     }
 }
