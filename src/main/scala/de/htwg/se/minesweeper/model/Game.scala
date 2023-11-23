@@ -58,7 +58,7 @@ case class Game(var state: Status, var difficulty: DifficultyLevel.Level = Diffi
         var tmpMatrix = pMatrix
         val si = bMatrix.size - 1
 
-        if(!(inArea(x, y, si)) || pMatrix.cell(y, x) != Symbols.Covered){
+        if(!(inArea(x, y)) || pMatrix.cell(y, x) != Symbols.Covered){
             return pMatrix
         }        
         var minesFound = 0
@@ -74,21 +74,21 @@ case class Game(var state: Status, var difficulty: DifficultyLevel.Level = Diffi
         if(minesFound == 0){
             tmpMatrix = tmpMatrix.replaceCell(y, x, Symbols.Empty)
             
-            if(inArea(x+1, y+1, si))
+            if(inArea(x+1, y+1))
                 tmpMatrix = Num(x+1, y+1, bMatrix, tmpMatrix)
-            if(inArea(x, y+1, si))
+            if(inArea(x, y+1))
                 tmpMatrix = Num(x, y+1, bMatrix, tmpMatrix)
-            if(inArea(x-1, y+1, si))
+            if(inArea(x-1, y+1))
                 tmpMatrix = Num(x-1, y+1, bMatrix, tmpMatrix)
-            if(inArea(x+1, y, si))
+            if(inArea(x+1, y))
                 tmpMatrix = Num(x+1, y, bMatrix, tmpMatrix)
-            if(inArea(x-1, y, si))
+            if(inArea(x-1, y))
                 tmpMatrix = Num(x-1, y, bMatrix, tmpMatrix)
-            if(inArea(x+1, y-1, si))
+            if(inArea(x+1, y-1))
                 tmpMatrix = Num(x+1, y-1, bMatrix, tmpMatrix)
-            if(inArea(x, y-1, si))
+            if(inArea(x, y-1))
                 tmpMatrix = Num(x, y-1, bMatrix, tmpMatrix)
-            if(inArea(x-1, y-1, si))
+            if(inArea(x-1, y-1))
                 tmpMatrix = Num(x-1, y-1, bMatrix, tmpMatrix)
             
             return tmpMatrix   
@@ -130,7 +130,7 @@ case class Game(var state: Status, var difficulty: DifficultyLevel.Level = Diffi
 
     def isBomb(x: Int, y: Int, m: Matrix[Symbols]): Boolean = {
         val si = m.size-1
-        if(inArea(x, y,si)){
+        if(inArea(x, y)){
             if(m.cell(y, x) == Symbols.Bomb){
                 return true
             }
