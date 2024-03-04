@@ -4,13 +4,22 @@ import scala.io.StdIn.readLine
 import scala.util.Random
 import de.htwg.se.minesweeper.difficulty.DifficultyLevel
 import de.htwg.se.minesweeper.difficulty
+import de.htwg.se.minesweeper.gameState.GameContext
 
 
-case class Game(var state: Status, var difficulty: DifficultyLevel.Level = DifficultyLevel.Easy) {
-    var gameState = Status.Playing
+case class Game(var difficulty: DifficultyLevel.Level = DifficultyLevel.Easy) {
+    val context = new GameContext(this)
 
     def gridSize: Int = difficulty.gridSize
     def bombCount: Int = difficulty.bombCount
+      var state: Status = Status.Playing
+  val context = new GameContext(this)
+
+  def startGame(): Unit = {
+    context.setState(new StartState)
+    context.doAction()
+    state = Status.Playing
+  }
 
     def setDifficulty(): Unit = {
         println("Enter the Difficulty Level")
@@ -31,6 +40,35 @@ case class Game(var state: Status, var difficulty: DifficultyLevel.Level = Diffi
 
     def inArea(x: Int, y: Int): Boolean = {
         x >= 0 && x < gridSize && y >= 0 && y < gridSize
+    }
+     def startGame(): Unit = {
+        context.setState(new StartState)
+        context.doAction()
+    }
+
+    def checkWinCondition(): Boolean = {
+        var uncoveredFieldsCount = 0
+        for (y <- 0 until gridSize; x <- 0 until gridSize) {
+            if (playerMatrix.cell(y, x) != Symbols.Covered && bombenMatrix.cell(y, x) != Symbols.Bomb) {
+                uncoveredFieldsCount += 1
+            }
+        }
+        uncoveredFieldsCount + bombCount == gridSize * gridSize
+    }
+
+    def makeMove(x: Int, y: Int): Unit = {
+        if (isBomb(x, y, bombenMatrix)) {
+            context.setState(new LoseState)
+            state = Status.Lost
+        } else {
+            if (checkWinCondition()) {
+                context.setState(new WinState)
+                state = Status.Won
+            } else {
+                context.setState(new PlayState)
+            }
+        }
+        context.doAction()
     }
 
 
@@ -133,7 +171,9 @@ case class Game(var state: Status, var difficulty: DifficultyLevel.Level = Diffi
         return false
     }
 
-    def checkGameState(realgame: Game) =
-      if(this.gameState == Status.Won) println("you just won!!!") else if (this.gameState == Status.Lost) println("you just Lost!!!") else print("")
-
+    def checkGameState(): Unit = state match {
+        case Status.Won => println("You just won!!!")
+        case Status.Lost => println("You just lost!!!")
+        case _ => // Keine Aktion erforderlich
     }
+}
